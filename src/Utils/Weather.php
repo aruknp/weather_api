@@ -2,55 +2,43 @@
 
 namespace App\Utils;
 
-use Symfony\Component\Config\Definition\Exception\Exception;
-
 /**
  * Weather class used to hold the current weather data.
  */
 class Weather
 {
     /**
-     * The city object.
-     *
-     * @var Util\City
+     * City name
      */
     public $cityName;
 
     /**
-     * The temperature object.
-     *
-     * @var Util\Temperature
+     * Weather description
      */
     public $weatherDesc;
 	
 	/**
-     * The temperature object.
-     *
-     * @var Util\Temperature
+     * Current temperature in K
      */
     public $tempCurrent;
 
 	/**
-     * The temperature object.
-     *
-     * @var Util\Temperature
+     * Min temperature in K
      */
     public $tempMin;
 	
 	/**
-     * The temperature object.
-     *
-     * @var Util\Temperature
+     * max temperature in K
      */
     public $tempMax;
 
     /**
-     * @var Util\Wind
+     * wind speed
      */
     public $windSpeed;
 	
 	/**
-     * @var Util\Wind
+     * Direction of wind in degrees
      */
     public $windDir;
 

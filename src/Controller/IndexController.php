@@ -72,6 +72,11 @@ class IndexController extends AbstractController
 		}
 	}
 	
+	/**
+	 * Form html result string with main data from weather object
+	 * @param type $weather object
+	 * @return string
+	 */
 	private static function getWeatherReponsemHtml( $weather ) {
 		
 		$result = '';
@@ -83,9 +88,9 @@ class IndexController extends AbstractController
 		$result = "<table>";
 			$result .= "<tr><td>Timestamp:</td><td>". date('Y-m-d H:i:s') ."</td></tr>";
 			$result .= "<tr><td>Weather:</td><td>$weather->weatherDesc</td></tr>";
-			$result .= "<tr><td>Current Temparature:</td><td> $weather->tempCurrent F</td></tr>";
-			$result .= "<tr><td>Min Temparature:</td><td> $weather->tempMin F</td></tr>";
-			$result .= "<tr><td>Max Temparature:</td><td> $weather->tempMax F</td></tr>";
+			$result .= "<tr><td>Current Temparature:</td><td> $weather->tempCurrent K</td></tr>";
+			$result .= "<tr><td>Min Temparature:</td><td> $weather->tempMin K</td></tr>";
+			$result .= "<tr><td>Max Temparature:</td><td> $weather->tempMax K</td></tr>";
 			$result .= "<tr><td>Wind Speed:</td><td> $weather->windSpeed m/s</td></tr>";
 			$result .= "<tr><td>Wind Direction:</td><td> $weather->windDir</td></tr>";
 			$result .= "<tr><td>City:</td><td>$weather->cityName</td></tr>";
