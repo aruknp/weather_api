@@ -1,0 +1,189 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+			
+			{% include 'includes/alert_message.html.twig' ignore missing %}
+			
+            <div class="card">
+				<div class="card-header">
+					<h5>Check Weather Information</h5>
+				</div>
+				<div class="card-body">
+					<div class="row">
+						<div class="col-md-8">
+							<form class="weather_form">
+								<div class="form-row">
+									<div class="col-md-6">
+										<input class="form-control api_code" type="text" value="b6907d289e10d714a6e88b30761fae22" placeholder="API code" />
+									</div>
+
+									<div class="col-md-6 input-group">
+										<input type="text" class="form-control api_city" value="Vilnius" placeholder="City name" aria-label="City name" aria-describedby="basic-addon2">
+										<div class="input-group-append">
+
+											<button id="api_submit" class="btn btn-success" type="button">Get Weather</button>
+											<button class="btn btn-success loading" type="button" disabled style="display: none;">
+												<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+												Loading...
+											</button>
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+
+					<div class="row mt-3">
+						<div class="col-md-8">
+							<!-- Nav pills -->
+							<div class="nav nav-tabs" role="tablist">
+								{#<li class="nav-item">
+									<a class="nav-link active" data-toggle="pill" href="#home">Home</a>
+								</li>#}
+							</div>
+
+							<!-- Tab panes -->
+							<div class="tab-content">
+								{#<div class="tab-pane container active" id="home">test1</div>#}
+							</div>
+						</div>
+					</div>
+
+				</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+{% block customcripts %}
+	<script type="text/javascript">
+		$( document ).ready(function() {
+			//submit button click: prepare for ajax request
+			$("#api_submit").on("click", function(event){
+				var validate_form = validateWeather();
+
+				if ( validate_form ) {
+					//show loading
+					$("#api_submit").hide();
+					$(".btn.loading").show();
+
+					//ajax post
+					$.ajax({
+						url: '{{ url('weather_ajax') }}',
+						type: 'POST',
+						data:{
+							api_code: $(".weather_form .api_code").val(),
+							api_city: $(".weather_form .api_city").val(),
+						},
+						dataType:   'json',
+						async:      true,
+
+						success: function(data, status) {
+							
+							console.log(data['status']);
+							
+							if ( data['status'] == 'error' ) {
+								
+								if ( data['message'] ) {
+									errorAlertMsg(data['message']);
+								} else {
+									errorAlertMsg('Error from ajax request');
+								}
+							} else {
+								fillTabContent(data);
+							}
+						},  
+						error : function(xhr, textStatus, errorThrown) {
+							errorAlertMsg('Ajax request failed.');
+						}
+					});
+					//hide loading
+					$( document ).ajaxComplete(function( event, request, settings ) {
+						$("#api_submit").show();
+						$(".btn.loading").hide();
+					});
+				}
+			});
+		
+		});
+		
+		//generate random string by given length of chars
+		function randString( chars ) {
+			return Math.random().toString(36).substr(2, chars);
+		}
+		
+		//form and fill tab with data from ajax
+		function fillTabContent( data ) {
+			
+			var li_obj = $(".nav-tabs");
+			var cont_obj = $(".tab-content");
+
+			var id = 'tab'+randString(5);
+
+			//check if no tabs exist to put active class
+			var content_class = 'tab-pane fade';
+			var tab_class = 'nav-item nav-link';
+			var aria_selected = 'false';
+			if ( !$(".nav-item").length ) {
+				content_class += ' show active';
+				tab_class += ' active';
+				aria_selected = 'true';
+			}
+
+			var new_li = '<a class="'+ tab_class +'" data-toggle="tab" href="#'+ 
+					id +'" aria-selected="'+ aria_selected +'">'+ 
+					data.tab_label +'</a>';
+			var new_cont = '<div class="'+ content_class +'" id="'+ 
+					id +'" role="tabpanel">'+ data.tab_content +'</div>';
+
+			li_obj.append(new_li);
+			cont_obj.append(new_cont);
+		}
+		
+		//validate form inputs not to be empty
+		function validateWeather() {
+			var api_code_obj = $(".weather_form .api_code");
+			var api_city_obj = $(".weather_form .api_city");
+
+			var api_code = api_code_obj.val();
+			var api_city = api_city_obj.val();
+
+			if ( !api_code ) {
+				api_code_obj.addClass('is-invalid');
+			} else {
+				api_code_obj.removeClass('is-invalid');
+			}
+
+			if ( !api_city ) {
+				api_city_obj.addClass('is-invalid');
+			} else {
+				api_city_obj.removeClass('is-invalid');
+			}
+
+			if ( !api_code || !api_city ) {
+				return false;
+			}
+			
+			return true;
+		}
+		
+		//display and hide error box
+		function errorAlertMsg( msg ) {
+			if ( msg ) {
+				$(".alert.msg").text(msg);
+				$(".alert.msg").show();
+				
+				setTimeout(function() {
+					$('.alert.msg').fadeOut('slow');
+				}, 5000); // <-- time in milliseconds
+			}
+		}
+		
+	</script>
+{% endblock %}

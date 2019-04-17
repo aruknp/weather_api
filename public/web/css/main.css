@@ -1,0 +1,15 @@
+/* 
+    Created on : Apr 15, 2019, 4:18:53 PM
+    Author     : aruknp
+*/
+
+/*HEADER*/
+
+header {
+    padding: 10px 0 20px 0;
+}
+
+#api_submit {
+	border-top-right-radius: .25rem;
+	border-bottom-right-radius: .25rem;
+}

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+		
+		{% block title %}
+			{% include 'includes/head_title.html.twig' ignore missing %}
+		{% endblock %}
+		
+        {% block stylesheets %}
+			<link href="{{ asset('web/css/bootstrap.min.css') }}" rel="stylesheet" />
+			<link href="{{ asset('web/css/main.css') }}" rel="stylesheet" />
+		{% endblock %}
+    </head>
+    <body>
+		<div class="container m-b-xs">
+			{% include 'includes/header.html.twig' ignore missing %}
+		</div>
+		
+        {% block body %}{% endblock %}
+
+        {% block javascripts %}
+			<script src="{{ asset('web/js/jquery.min.js') }}"></script>
+			<script src="{{ asset('web/js/bootstrap.min.js') }}"></script>
+		{% endblock %}
+		
+		{% block customcripts %}{% endblock %}
+    </body>
+</html>
